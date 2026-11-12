@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Veterinaria.Entidades/Veterinaria.Entidades.csproj" />
+  <Project Path="Veterinaria.Datos/Veterinaria.Datos.csproj" />
+  <Project Path="Veterinaria.Negocio/Veterinaria.Negocio.csproj" />
+  <Project Path="Veterinaria.Api/Veterinaria.Api.csproj" />
+</Solution>

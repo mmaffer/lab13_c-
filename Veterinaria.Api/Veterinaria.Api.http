@@ -1,0 +1,216 @@
+@host = http://localhost:5080
+
+### ===== PROPIETARIOS =====
+
+### 200 - Listar propietarios
+GET {{host}}/api/propietarios
+
+### 200 - Listar con filtros (query string)
+GET {{host}}/api/propietarios?nombre=ramirez&conMascotas=true
+
+### 200 - Obtener por id
+GET {{host}}/api/propietarios/1
+
+### 200 - Ruta anidada: mascotas del propietario 1
+GET {{host}}/api/propietarios/1/mascotas
+
+### 404 - Propietario inexistente
+GET {{host}}/api/propietarios/9999
+
+### 404 - Mascotas de un propietario inexistente
+GET {{host}}/api/propietarios/9999/mascotas
+
+### 201 - Crear propietario
+POST {{host}}/api/propietarios
+Content-Type: application/json
+
+{
+  "nombres": "Jose",
+  "apellidos": "Huaman Luna",
+  "documento": "46789123",
+  "telefono": "933221100",
+  "email": "jose.huaman@example.com",
+  "direccion": "Av. Javier Prado 2000, San Isidro"
+}
+
+### 400 - Datos invalidos (sin nombres, documento corto, email malo)
+POST {{host}}/api/propietarios
+Content-Type: application/json
+
+{
+  "apellidos": "Sin Nombre",
+  "documento": "123",
+  "email": "no-es-un-correo"
+}
+
+### 409 - Documento duplicado (ya existe 45871236)
+POST {{host}}/api/propietarios
+Content-Type: application/json
+
+{
+  "nombres": "Otro",
+  "apellidos": "Carlos",
+  "documento": "45871236"
+}
+
+### 204 - Actualizar propietario
+PUT {{host}}/api/propietarios/2
+Content-Type: application/json
+
+{
+  "nombres": "Lucia",
+  "apellidos": "Fernandez Paz",
+  "telefono": "956000111",
+  "email": "lucia.fernandez@example.com",
+  "direccion": "Jr. Los Pinos 456, Surco"
+}
+
+### 404 - Actualizar propietario inexistente
+PUT {{host}}/api/propietarios/9999
+Content-Type: application/json
+
+{
+  "nombres": "X",
+  "apellidos": "Y"
+}
+
+### 400 - Actualizar con datos invalidos
+PUT {{host}}/api/propietarios/2
+Content-Type: application/json
+
+{
+  "nombres": "",
+  "apellidos": ""
+}
+
+### 409 - Eliminar propietario que tiene mascotas
+DELETE {{host}}/api/propietarios/1
+
+### 204 - Eliminar propietario sin mascotas (Rosa, id 5). Repetirlo despues da 404.
+DELETE {{host}}/api/propietarios/5
+
+### 404 - Eliminar propietario inexistente
+DELETE {{host}}/api/propietarios/9999
+
+
+### ===== MASCOTAS =====
+
+### 200 - Listar mascotas
+GET {{host}}/api/mascotas
+
+### 200 - Listar con filtros (especie, nombre, propietario, activo)
+GET {{host}}/api/mascotas?especie=perro&idPropietario=1&activo=true
+
+### 200 - Obtener mascota por id
+GET {{host}}/api/mascotas/1
+
+### 404 - Mascota inexistente
+GET {{host}}/api/mascotas/9999
+
+### 201 - Crear mascota
+POST {{host}}/api/mascotas
+Content-Type: application/json
+
+{
+  "nombre": "Bruno",
+  "especie": "Perro",
+  "raza": "Schnauzer",
+  "sexo": "M",
+  "fechaNacimiento": "2024-02-14",
+  "pesoKg": 9.5,
+  "microchip": "985112000000100",
+  "idPropietario": 3
+}
+
+### 400 - Datos invalidos (sexo 'X', peso negativo, sin nombre)
+POST {{host}}/api/mascotas
+Content-Type: application/json
+
+{
+  "especie": "Perro",
+  "sexo": "X",
+  "pesoKg": -3,
+  "idPropietario": 3
+}
+
+### 409 - Microchip duplicado (ya lo usa Firulais)
+POST {{host}}/api/mascotas
+Content-Type: application/json
+
+{
+  "nombre": "Clon",
+  "especie": "Perro",
+  "sexo": "M",
+  "microchip": "985112000000001",
+  "idPropietario": 1
+}
+
+### 409 - Propietario inexistente
+POST {{host}}/api/mascotas
+Content-Type: application/json
+
+{
+  "nombre": "Huerfano",
+  "especie": "Gato",
+  "sexo": "H",
+  "idPropietario": 9999
+}
+
+### 409 - Fecha de nacimiento en el futuro
+POST {{host}}/api/mascotas
+Content-Type: application/json
+
+{
+  "nombre": "Futuro",
+  "especie": "Gato",
+  "sexo": "H",
+  "fechaNacimiento": "2099-01-01",
+  "idPropietario": 1
+}
+
+### 204 - Actualizar mascota
+PUT {{host}}/api/mascotas/1
+Content-Type: application/json
+
+{
+  "nombre": "Firulais",
+  "especie": "Perro",
+  "raza": "Labrador",
+  "sexo": "M",
+  "fechaNacimiento": "2021-03-15",
+  "pesoKg": 29.0,
+  "microchip": "985112000000001",
+  "activo": true,
+  "idPropietario": 1
+}
+
+### 404 - Actualizar mascota inexistente
+PUT {{host}}/api/mascotas/9999
+Content-Type: application/json
+
+{
+  "nombre": "X",
+  "especie": "Perro",
+  "sexo": "M",
+  "activo": true,
+  "idPropietario": 1
+}
+
+### 409 - Actualizar con microchip de otra mascota (Mishi usa el de Rocky)
+PUT {{host}}/api/mascotas/2
+Content-Type: application/json
+
+{
+  "nombre": "Mishi",
+  "especie": "Gato",
+  "sexo": "H",
+  "microchip": "985112000000003",
+  "activo": true,
+  "idPropietario": 1
+}
+
+### 204 - Eliminar mascota (usa el id devuelto por el POST, ej. 11). Repetirlo da 404.
+DELETE {{host}}/api/mascotas/11
+
+### 404 - Eliminar mascota inexistente
+DELETE {{host}}/api/mascotas/9999

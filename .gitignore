@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+appsettings.*.local.json
+secrets.json
+CLAUDE.md
